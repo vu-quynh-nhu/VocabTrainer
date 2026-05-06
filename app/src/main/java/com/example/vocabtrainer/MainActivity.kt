@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
                             MainScreen(navController = navController)
                         }
                         composable("create_deck") {
-                            CreateDeckPage()
+                            CreateDeckPage(navController = navController)
                         }
                     })
             }
