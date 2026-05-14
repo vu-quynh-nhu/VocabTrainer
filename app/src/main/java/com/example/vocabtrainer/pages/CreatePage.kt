@@ -27,9 +27,15 @@ fun CreatePage(modifier: Modifier = Modifier, navController: NavController) {
             .background(
                 brush = Brush.linearGradient(
                     colors = listOf(
-                        Color(0xFFD32F2F),
-                        Color(0xFFFF5722),
-                        Color(0xFFFF8C00),
+                        Color(0xFF4F6B24),
+                        Color(0xFF5E7F2C),
+                        Color(0xFF6F943C),
+                        Color(0xFF7FA34A),
+                        Color(0xFF8EAE5B),
+                        Color(0xFF9CBD72),
+                        Color(0xFFA7C281),
+                        Color(0xFFACC587),
+                        //Color(0xFF8CA364)
                     ),
                     start = Offset.Zero,
                     end = Offset.Infinite
@@ -44,7 +50,10 @@ fun CreatePage(modifier: Modifier = Modifier, navController: NavController) {
             ),
             modifier = Modifier
                 .size(width = 300.dp, height = 170.dp)
-                .padding(bottom = 12.dp),
+                .padding(bottom = 20.dp),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 15.dp
+            ),
             onClick = { navController.navigate("create_deck") }
         ) {
             Box(
@@ -65,6 +74,9 @@ fun CreatePage(modifier: Modifier = Modifier, navController: NavController) {
             ),
             modifier = Modifier
                 .size(width = 300.dp, height = 170.dp),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 15.dp
+            ),
             onClick = {
 
             }

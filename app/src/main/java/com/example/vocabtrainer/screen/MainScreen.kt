@@ -59,11 +59,11 @@ fun MainScreen(navController: NavController) {
                         },
                         alwaysShowLabel = selectedIndex == index,
                         colors = NavigationBarItemDefaults.colors(
-                            indicatorColor = Color(0xFFFFCC80).copy(alpha = 0.2f),
-                            unselectedIconColor = Color(0xFFFF8C00),
-                            unselectedTextColor = Color(0xFFFF8C00),
-                            selectedIconColor = Color(0xFFFFCC80),
-                            selectedTextColor = Color(0xFFFFCC80)
+                            indicatorColor = Color(0xFFDDE6C8).copy(alpha = 0.2f),
+                            unselectedIconColor = Color(0xFF7FA34A),
+                            unselectedTextColor = Color(0xFF7FA34A),
+                            selectedIconColor = Color(0xFFC9D8A6),
+                            selectedTextColor = Color(0xFFC9D8A6)
                         )
                     )
                 }
