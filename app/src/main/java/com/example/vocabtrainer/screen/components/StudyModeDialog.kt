@@ -28,8 +28,8 @@ fun StudyModeDialog(
     onConfirm: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val difficulty = listOf("leicht", "mittel", "schwer")
-    val timed = listOf("Ja", "Nein")
+    val difficultyOptions = listOf("leicht", "mittel", "schwer")
+    val timedOptions = listOf("Nein", "Ja")
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
 
@@ -55,7 +55,7 @@ fun StudyModeDialog(
                 )
 
                 SegmentedButton(
-                    options = difficulty
+                    options = difficultyOptions
                 )
 
                 Text(
@@ -64,7 +64,7 @@ fun StudyModeDialog(
                 )
 
                 SegmentedButton(
-                    options = timed
+                    options = timedOptions
                 )
 
                 Button(
