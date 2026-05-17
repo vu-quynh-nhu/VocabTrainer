@@ -77,10 +77,10 @@ fun MainScreen(navController: NavController) {
 @Composable
 fun ContentScreen(modifier: Modifier = Modifier, selectedIndex: Int, navController: NavController) {
     when(selectedIndex) {
-        0 -> DeckPage()
+        0 -> DeckPage(modifier = modifier)
         1 -> {
             CreatePage(modifier = modifier, navController = navController)
         }
-        2 -> StudyPage()
+        2 -> StudyPage(modifier = modifier)
     }
 }

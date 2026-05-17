@@ -30,7 +30,9 @@ fun CreateDeckPage(modifier: Modifier = Modifier, navController: NavController) 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {},
+                title = {
+                    Text(text = "Stapel Erstellen")
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent,
                     titleContentColor = Color.White,
@@ -38,7 +40,7 @@ fun CreateDeckPage(modifier: Modifier = Modifier, navController: NavController) 
                 ),
                 navigationIcon = {
                     IconButton(
-                        onClick = {navController.popBackStack()}
+                        onClick = { navController.popBackStack() }
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -49,10 +51,10 @@ fun CreateDeckPage(modifier: Modifier = Modifier, navController: NavController) 
                 }
             )
         }
-    ) {
-        contentPadding ->
+    ) { contentPadding ->
         Box(
-            modifier = modifier.fillMaxSize()
+            modifier = modifier
+                .fillMaxSize()
                 .background(
                     brush = Brush.linearGradient(
                         colors = listOf(
@@ -71,11 +73,7 @@ fun CreateDeckPage(modifier: Modifier = Modifier, navController: NavController) 
                 //verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = "Stapel erstellen",
-                    fontSize = 40.sp,
-                    color = Color.White
-                )
+                
             }
         }
     }
