@@ -16,19 +16,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.example.vocabtrainer.NavigationItem
 import com.example.vocabtrainer.R
-import com.example.vocabtrainer.pages.CreateDeckPage
 import com.example.vocabtrainer.pages.CreatePage
 import com.example.vocabtrainer.pages.DeckPage
 import com.example.vocabtrainer.pages.StudyPage
+import com.example.vocabtrainer.viewmodel.StudyViewModel
 
 @Composable
-fun MainScreen(navController: NavController) {
+fun MainScreen(
+    navController: NavController,
+    studyViewModel: StudyViewModel
+) {
+
 
     val navigationItemList = listOf(
         NavigationItem("Stapel", R.drawable.cards_deck),
@@ -45,14 +47,17 @@ fun MainScreen(navController: NavController) {
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
             NavigationBar {
-                navigationItemList.forEachIndexed {index, navItem ->
+                navigationItemList.forEachIndexed { index, navItem ->
                     NavigationBarItem(
                         selected = selectedIndex == index,
                         onClick = {
                             selectedIndex = index
                         },
                         icon = {
-                            Icon(painter = painterResource(navItem.icon), contentDescription = "Icon")
+                            Icon(
+                                painter = painterResource(navItem.icon),
+                                contentDescription = "Icon"
+                            )
                         },
                         label = {
                             Text(text = navItem.label)
@@ -70,17 +75,32 @@ fun MainScreen(navController: NavController) {
             }
         }
     ) { contentPadding ->
-        ContentScreen(modifier = Modifier.padding(contentPadding), selectedIndex, navController)
+        ContentScreen(
+            modifier = Modifier.padding(contentPadding),
+            selectedIndex,
+            navController,
+            studyViewModel = studyViewModel
+        )
     }
 }
 
 @Composable
-fun ContentScreen(modifier: Modifier = Modifier, selectedIndex: Int, navController: NavController) {
-    when(selectedIndex) {
+fun ContentScreen(
+    modifier: Modifier = Modifier,
+    selectedIndex: Int,
+    navController: NavController,
+    studyViewModel: StudyViewModel
+) {
+    when (selectedIndex) {
         0 -> DeckPage(modifier = modifier)
         1 -> {
             CreatePage(modifier = modifier, navController = navController)
         }
-        2 -> StudyPage(modifier = modifier)
+
+        2 -> StudyPage(
+            modifier = modifier,
+            navController = navController,
+            viewModel = studyViewModel
+        )
     }
 }
