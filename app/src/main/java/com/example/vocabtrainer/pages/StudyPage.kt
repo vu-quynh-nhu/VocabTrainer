@@ -10,10 +10,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -23,7 +19,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.vocabtrainer.screen.components.StudyModeDialog
 import com.example.vocabtrainer.viewmodel.StudyViewModel
 
 @Composable
@@ -32,23 +27,6 @@ fun StudyPage(
     navController: NavController,
     viewModel: StudyViewModel
 ) {
-    var showStudyModeDialog by remember { mutableStateOf(false) }
-
-    if (showStudyModeDialog) {
-        StudyModeDialog(
-            onConfirmation = {
-                showStudyModeDialog = false
-                when (viewModel.selectedStudyModePage) {
-                    "classic_mode" -> navController.navigate("classic_mode")
-                    "typing_mode" -> navController.navigate("typing_mode")
-                    "fill_in_mode" -> navController.navigate("fill_in_mode")
-                }
-            },
-            onDismissRequest = { showStudyModeDialog = false },
-            viewModel = viewModel
-        )
-    }
-
     Column(
         modifier = modifier.fillMaxSize()
             .background(
@@ -92,9 +70,11 @@ fun StudyPage(
                 defaultElevation = 15.dp
             ),
             onClick = {
-                showStudyModeDialog = true
+                //showStudyModeDialog = true
                 viewModel.setHasDifficulty(false)
                 viewModel.setStudyModePage("classic_mode")
+                viewModel.resetStudyModeSettings()
+                navController.navigate("study_mode_settings")
             }
         ) {
             Text(
@@ -122,9 +102,11 @@ fun StudyPage(
                 defaultElevation = 15.dp
             ),
             onClick = {
-                showStudyModeDialog = true
-                viewModel.setHasDifficulty(false)
+                //showStudyModeDialog = true
+                viewModel.setHasDifficulty(true)
                 viewModel.setStudyModePage("typing_mode")
+                viewModel.resetStudyModeSettings()
+                navController.navigate("study_mode_settings")
             }
         ) {
             Text(
@@ -152,9 +134,10 @@ fun StudyPage(
                 defaultElevation = 15.dp
             ),
             onClick = {
-                showStudyModeDialog = true
                 viewModel.setHasDifficulty(true)
                 viewModel.setStudyModePage("fill_in_mode")
+                viewModel.resetStudyModeSettings()
+                navController.navigate("study_mode_settings")
             }
         ) {
             Text(

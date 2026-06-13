@@ -10,13 +10,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.example.vocabtrainer.NavigationItem
 import com.example.vocabtrainer.R
 import com.example.vocabtrainer.pages.CreatePage
@@ -30,27 +32,32 @@ fun MainScreen(
     studyViewModel: StudyViewModel
 ) {
 
-
     val navigationItemList = listOf(
-        NavigationItem("Stapel", R.drawable.cards_deck),
-        NavigationItem("Erstellen", R.drawable.add_deck),
-        NavigationItem("Lernen", R.drawable.learn)
+        NavigationItem("Stapel", R.drawable.cards_deck, "decks"),
+        NavigationItem("Erstellen", R.drawable.add_deck, "create"),
+        NavigationItem("Lernen", R.drawable.learn, "study")
     )
 
     // this stores the selected tab
-    var selectedIndex by remember {
-        mutableIntStateOf(0)
-    }
+    val mainNavController = rememberNavController()
+    val navBackStackEntry by mainNavController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route ?: "decks"
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
             NavigationBar {
-                navigationItemList.forEachIndexed { index, navItem ->
+                navigationItemList.forEach { navItem ->
                     NavigationBarItem(
-                        selected = selectedIndex == index,
+                        selected = currentRoute == navItem.route,
                         onClick = {
-                            selectedIndex = index
+                            mainNavController.navigate(navItem.route) {
+                                popUpTo(mainNavController.graph.findStartDestination().id){
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
                         },
                         icon = {
                             Icon(
@@ -61,7 +68,7 @@ fun MainScreen(
                         label = {
                             Text(text = navItem.label)
                         },
-                        alwaysShowLabel = selectedIndex == index,
+                        alwaysShowLabel = currentRoute == navItem.route,
                         colors = NavigationBarItemDefaults.colors(
                             indicatorColor = Color(0xFFDDE6C8).copy(alpha = 0.2f),
                             unselectedIconColor = Color(0xFF7FA34A),
@@ -74,32 +81,23 @@ fun MainScreen(
             }
         }
     ) { contentPadding ->
-        ContentScreen(
-            modifier = Modifier.padding(contentPadding),
-            selectedIndex,
-            navController,
-            studyViewModel = studyViewModel
-        )
-    }
-}
-
-@Composable
-fun ContentScreen(
-    modifier: Modifier = Modifier,
-    selectedIndex: Int,
-    navController: NavController,
-    studyViewModel: StudyViewModel
-) {
-    when (selectedIndex) {
-        0 -> DeckPage(modifier = modifier)
-        1 -> {
-            CreatePage(modifier = modifier, navController = navController)
+        NavHost(
+            navController = mainNavController,
+            startDestination = "decks",
+            modifier = Modifier.padding(contentPadding)
+        ) {
+            composable("decks") {
+                DeckPage(navController = navController)
+            }
+            composable("create") {
+                CreatePage(navController = navController)
+            }
+            composable("study") {
+                StudyPage(
+                    navController = navController,
+                    viewModel = studyViewModel
+                )
+            }
         }
-
-        2 -> StudyPage(
-            modifier = modifier,
-            navController = navController,
-            viewModel = studyViewModel
-        )
     }
 }

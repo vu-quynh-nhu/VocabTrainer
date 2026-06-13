@@ -11,7 +11,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.vocabtrainer.pages.ClassicModePage
 import com.example.vocabtrainer.pages.CreateDeckPage
 import com.example.vocabtrainer.pages.CreatePage
+import com.example.vocabtrainer.pages.DeckPage
 import com.example.vocabtrainer.pages.FillInBlankModePage
+import com.example.vocabtrainer.pages.StudyModeSettingsPage
+import com.example.vocabtrainer.pages.StudyPage
 import com.example.vocabtrainer.pages.TypingModePage
 import com.example.vocabtrainer.screen.MainScreen
 import com.example.vocabtrainer.ui.theme.VocabTrainerTheme
@@ -40,6 +43,12 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("create_deck") {
                             CreateDeckPage(navController = navController)
+                        }
+                        composable("study_mode_settings") {
+                            StudyModeSettingsPage(
+                                navController = navController,
+                                viewModel = studyViewModel
+                            )
                         }
                         composable("classic_mode") {
                             ClassicModePage(

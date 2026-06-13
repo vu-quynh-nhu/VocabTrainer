@@ -16,9 +16,9 @@ import androidx.compose.ui.graphics.Color
 fun SegmentedButton(
     modifier: Modifier = Modifier,
     options: List<String>,
+    selectedIndex: Int,
     onSelectedIndex: (Int) -> Unit
 ) {
-    var selectedOptionIndex by remember { mutableIntStateOf(0) }
 
     SingleChoiceSegmentedButtonRow {
         options.forEachIndexed { index, label ->
@@ -28,10 +28,9 @@ fun SegmentedButton(
                     count = options.size
                 ),
                 onClick = {
-                    selectedOptionIndex = index
                     onSelectedIndex(index)
                 },
-                selected = index == selectedOptionIndex,
+                selected = index == selectedIndex,
                 label = { Text(label) },
                 colors = SegmentedButtonDefaults.colors(
                     activeBorderColor = Color(0xFFC9D8A6),
