@@ -5,6 +5,10 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.example.vocabtrainer.models.Card
+import com.example.vocabtrainer.models.Deck
+import com.example.vocabtrainer.models.StudyMode
+import com.example.vocabtrainer.models.StudySession
 
 class StudyViewModel : ViewModel() {
     var hasDifficultyMode by mutableStateOf(false)
@@ -19,10 +23,16 @@ class StudyViewModel : ViewModel() {
     var selectedStudyModePage by mutableStateOf("")
         private set
 
-    var isTimed by mutableStateOf(false)
+    var cardSideIndex by mutableIntStateOf(0)
         private set
 
-    var timedIndex by mutableIntStateOf(0)
+    var selectedStudyDeck by mutableStateOf<Deck?>(null)
+        private set
+
+    var studyMode by mutableStateOf<StudyMode?>(null)
+        private set
+
+    var studySession by mutableStateOf<StudySession?>(null)
         private set
 
     fun setHasDifficulty(value: Boolean) {
@@ -49,14 +59,69 @@ class StudyViewModel : ViewModel() {
         selectedStudyModePage = studyModePage
     }
 
-    fun setIsTimed(selectedTimeOption: Int) {
-        timedIndex = selectedTimeOption
-        isTimed = selectedTimeOption == 1
+    fun setCardSide(selectedCardSide: Int) {
+        cardSideIndex = selectedCardSide
+    }
+
+    fun createStudySession(
+        selectedDeck: Deck?,
+        difficultyIndex: Int,
+        cardSideIndex: Int,
+        ) {
+        studyMode = StudyMode(
+            deck = selectedDeck,
+            difficulty = difficultyIndex,
+            cardSide = cardSideIndex,
+        )
+    }
+
+    fun setStudySession(cards: List<Card>) {
+        studySession = StudySession(
+            cards = cards,
+            currentIndex = 0,
+            correctAnswer = 0,
+            wrongAnswer = 0,
+        )
+    }
+
+    fun correctAnswer() {
+        val session = studySession ?: return
+
+        studySession = session.copy(
+            currentIndex = session.currentIndex + 1,
+            correctAnswer = session.correctAnswer + 1
+        )
+    }
+
+    fun wrongAnswer() {
+        val session = studySession ?: return
+        val currentCard = session.cards.getOrNull(session.currentIndex) ?: return
+
+        studySession = session.copy(
+            currentIndex = session.currentIndex + 1,
+            wrongAnswer = session.wrongAnswer + 1,
+            wrongCards = session.wrongCards + currentCard
+        )
+    }
+
+    fun repeatWrongCards() {
+        val session = studySession ?: return
+
+        studySession = StudySession(
+            cards = session.wrongCards,
+            currentIndex = 0,
+            correctAnswer = 0,
+            wrongAnswer = 0,
+            wrongCards = emptyList()
+        )
+    }
+
+    fun selectedStudyDeck(deck: Deck) {
+        selectedStudyDeck = deck
     }
 
     fun resetStudyModeSettings() {
         setDifficultyMode(0)
-        setIsTimed(0)
-
+        setCardSide(0)
     }
 }

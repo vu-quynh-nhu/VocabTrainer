@@ -9,15 +9,20 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.vocabtrainer.pages.ClassicModePage
+import com.example.vocabtrainer.pages.CreateCardPage
 import com.example.vocabtrainer.pages.CreateDeckPage
 import com.example.vocabtrainer.pages.CreatePage
 import com.example.vocabtrainer.pages.DeckPage
 import com.example.vocabtrainer.pages.FillInBlankModePage
+import com.example.vocabtrainer.pages.InsideDeckPage
 import com.example.vocabtrainer.pages.StudyModeSettingsPage
 import com.example.vocabtrainer.pages.StudyPage
+import com.example.vocabtrainer.pages.StudyResultPage
 import com.example.vocabtrainer.pages.TypingModePage
 import com.example.vocabtrainer.screen.MainScreen
 import com.example.vocabtrainer.ui.theme.VocabTrainerTheme
+import com.example.vocabtrainer.viewmodel.CardViewModel
+import com.example.vocabtrainer.viewmodel.DeckViewModel
 import com.example.vocabtrainer.viewmodel.StudyViewModel
 
 class MainActivity : ComponentActivity() {
@@ -30,6 +35,8 @@ class MainActivity : ComponentActivity() {
             VocabTrainerTheme {
                 val navController = rememberNavController()
                 val studyViewModel: StudyViewModel = viewModel()
+                val deckViewModel: DeckViewModel = viewModel()
+                val cardViewModel: CardViewModel = viewModel()
 
                 NavHost(
                     navController = navController,
@@ -38,22 +45,43 @@ class MainActivity : ComponentActivity() {
                         composable("main") {
                             MainScreen(
                                 navController = navController,
-                                studyViewModel = studyViewModel
+                                studyViewModel = studyViewModel,
+                                deckViewModel = deckViewModel,
+                                cardViewModel = cardViewModel
+                            )
+                        }
+                        composable("inside_deck") {
+                            InsideDeckPage(
+                                navController = navController,
+                                deckViewModel = deckViewModel,
+                                cardViewModel = cardViewModel
                             )
                         }
                         composable("create_deck") {
-                            CreateDeckPage(navController = navController)
+                            CreateDeckPage(
+                                navController = navController,
+                                viewModel = deckViewModel
+                            )
+                        }
+                        composable("create_card") {
+                            CreateCardPage(
+                                navController = navController,
+                                deckViewModel = deckViewModel,
+                                cardViewModel = cardViewModel
+                            )
                         }
                         composable("study_mode_settings") {
                             StudyModeSettingsPage(
                                 navController = navController,
-                                viewModel = studyViewModel
+                                studyViewModel = studyViewModel,
+                                deckViewModel = deckViewModel,
+                                cardViewModel = cardViewModel
                             )
                         }
                         composable("classic_mode") {
                             ClassicModePage(
                                 navController = navController,
-                                viewModel = studyViewModel
+                                viewModel = studyViewModel,
                             )
                         }
                         composable("typing_mode") {
@@ -66,6 +94,12 @@ class MainActivity : ComponentActivity() {
                             FillInBlankModePage(
                                 navController = navController,
                                 viewModel = studyViewModel
+                            )
+                        }
+                        composable("results") {
+                            StudyResultPage(
+                                navController = navController,
+                                studyViewModel = studyViewModel
                             )
                         }
                     }

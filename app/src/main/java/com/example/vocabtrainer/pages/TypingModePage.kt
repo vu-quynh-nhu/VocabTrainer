@@ -43,7 +43,7 @@ fun TypingModePage(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Classic Mode, isTimed: ${viewModel.isTimed}",
+            text = "typing mode, difficulty: ${viewModel.selectedDifficulty}",
             fontSize = 40.sp,
             color = Color.White
         )

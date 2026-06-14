@@ -19,9 +19,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.vocabtrainer.viewmodel.DeckViewModel
 
 @Composable
-fun CreatePage(modifier: Modifier = Modifier, navController: NavController) {
+fun CreatePage(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    viewModel: DeckViewModel
+) {
     Column(
         modifier = modifier.fillMaxSize()
             .background(
@@ -35,7 +40,6 @@ fun CreatePage(modifier: Modifier = Modifier, navController: NavController) {
                         Color(0xFF9CBD72),
                         Color(0xFFA7C281),
                         Color(0xFFACC587),
-                        //Color(0xFF8CA364)
                     ),
                     start = Offset.Zero,
                     end = Offset.Infinite
@@ -54,7 +58,9 @@ fun CreatePage(modifier: Modifier = Modifier, navController: NavController) {
             elevation = CardDefaults.cardElevation(
                 defaultElevation = 15.dp
             ),
-            onClick = { navController.navigate("create_deck") }
+            onClick = {
+                navController.navigate("create_deck")
+            }
         ) {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -68,28 +74,30 @@ fun CreatePage(modifier: Modifier = Modifier, navController: NavController) {
             }
         }
 
-        ElevatedCard(
-            colors = CardDefaults.cardColors(
-                containerColor = Color.White
-            ),
-            modifier = Modifier
-                .size(width = 300.dp, height = 170.dp),
-            elevation = CardDefaults.cardElevation(
-                defaultElevation = 15.dp
-            ),
-            onClick = {
-
-            }
-        ) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
+        if (viewModel.decks.isNotEmpty()) {
+            ElevatedCard(
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.White
+                ),
+                modifier = Modifier
+                    .size(width = 300.dp, height = 170.dp),
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = 15.dp
+                ),
+                onClick = {
+                    navController.navigate("create_card")
+                }
             ) {
-                Text(
-                    text = "Karte erstellen",
-                    color = Color.Black,
-                    fontSize = 25.sp
-                )
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Karte erstellen",
+                        color = Color.Black,
+                        fontSize = 25.sp
+                    )
+                }
             }
         }
     }

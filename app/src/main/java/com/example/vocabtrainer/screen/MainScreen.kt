@@ -24,14 +24,17 @@ import com.example.vocabtrainer.R
 import com.example.vocabtrainer.pages.CreatePage
 import com.example.vocabtrainer.pages.DeckPage
 import com.example.vocabtrainer.pages.StudyPage
+import com.example.vocabtrainer.viewmodel.CardViewModel
+import com.example.vocabtrainer.viewmodel.DeckViewModel
 import com.example.vocabtrainer.viewmodel.StudyViewModel
 
 @Composable
 fun MainScreen(
     navController: NavController,
-    studyViewModel: StudyViewModel
+    studyViewModel: StudyViewModel,
+    deckViewModel: DeckViewModel,
+    cardViewModel: CardViewModel
 ) {
-
     val navigationItemList = listOf(
         NavigationItem("Stapel", R.drawable.cards_deck, "decks"),
         NavigationItem("Erstellen", R.drawable.add_deck, "create"),
@@ -87,10 +90,17 @@ fun MainScreen(
             modifier = Modifier.padding(contentPadding)
         ) {
             composable("decks") {
-                DeckPage(navController = navController)
+                DeckPage(
+                    navController = navController,
+                    deckViewModel = deckViewModel,
+                    cardViewModel = cardViewModel
+                )
             }
             composable("create") {
-                CreatePage(navController = navController)
+                CreatePage(
+                    navController = navController,
+                    viewModel = deckViewModel
+                )
             }
             composable("study") {
                 StudyPage(

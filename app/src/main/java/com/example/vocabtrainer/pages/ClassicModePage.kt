@@ -1,15 +1,35 @@
 package com.example.vocabtrainer.pages
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.vocabtrainer.viewmodel.StudyViewModel
@@ -19,9 +39,27 @@ fun ClassicModePage(
     viewModel: StudyViewModel,
     navController: NavController
 ) {
+    var showAnswer by remember { mutableStateOf(false) }
+    val chosenCardSide = viewModel.studyMode?.cardSide
+    val session = viewModel.studySession ?: return
+    val currentCard = session.cards.getOrNull(session.currentIndex)
+
+    LaunchedEffect(session.currentIndex) {
+        if (session.currentIndex >= session.cards.size) {
+            navController.navigate("results") {
+                popUpTo("classic_mode") {
+                    inclusive = true
+                }
+            }
+        }
+    }
+
+    if (currentCard == null) {
+        return
+    }
+
     Column(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
             .background(
                 brush = Brush.linearGradient(
                     colors = listOf(
@@ -33,19 +71,103 @@ fun ClassicModePage(
                         Color(0xFF9CBD72),
                         Color(0xFFA7C281),
                         Color(0xFFACC587),
-                        //Color(0xFF8CA364)
                     ),
                     start = Offset.Zero,
                     end = Offset.Infinite
                 )
             ),
-        //verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Classic Mode, isTimed: ${viewModel.isTimed}",
-            fontSize = 40.sp,
-            color = Color.White
+            text = "${session.currentIndex + 1} von ${session.cards.size} Karten"
         )
+
+        ElevatedCard(
+            colors = CardDefaults.cardColors(
+                containerColor = Color.White
+            ),
+            modifier = Modifier
+                .size(width = 350.dp, height = 600.dp)
+                .padding(bottom = 20.dp),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 15.dp
+            ),
+        ) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = if (!showAnswer) {
+                        if (chosenCardSide == 0) {
+                            currentCard.frontSide
+                        } else {
+                            currentCard.backSide
+                        }
+                    } else {
+                        if (chosenCardSide == 0) {
+                            currentCard.backSide
+                        } else {
+                            currentCard.frontSide
+                        }
+                    },
+                    color = Color.Black,
+                    fontSize = 25.sp
+                )
+            }
+        }
+
+        if (showAnswer) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Button(
+                    shape = RoundedCornerShape(50),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFF44336)
+                    ),
+                    onClick = {
+                        viewModel.wrongAnswer()
+                        showAnswer = false
+                    }
+                ) {
+                    Icon(
+                        Icons.Default.Close,
+                        null
+                    )
+                }
+
+                Button(
+                    shape = RoundedCornerShape(50),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF4CAF50)
+                    ),
+                    onClick = {
+                        viewModel.correctAnswer()
+                        showAnswer = false
+                    }
+                ) {
+                    Icon(
+                        Icons.Default.Check,
+                        null
+                    )
+                }
+            }
+        } else {
+            Button(
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF6F943C)
+                ),
+                onClick = {
+                    showAnswer = true
+                }
+            ) {
+                Text(
+                    text = "Lösung anzeigen",
+                    color = Color.Black
+                )
+            }
+        }
     }
 }

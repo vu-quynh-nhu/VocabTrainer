@@ -43,7 +43,7 @@ fun FillInBlankModePage(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Fill In Mode, difficulty: ${viewModel.selectedDifficulty}, isTimed: ${viewModel.isTimed}",
+            text = "Fill In Mode, difficulty: ${viewModel.selectedDifficulty}",
             fontSize = 40.sp,
             color = Color.White
         )
