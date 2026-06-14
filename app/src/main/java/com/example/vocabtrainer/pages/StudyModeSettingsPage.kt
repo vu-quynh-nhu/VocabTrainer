@@ -280,8 +280,18 @@ fun StepTwo(
                                 inclusive = true
                             }
                         }
-                        "typing_mode" -> navController.navigate("typing_mode")
-                        "fill_in_mode" -> navController.navigate("fill_in_mode")
+
+                        "typing_mode" -> navController.navigate("typing_mode"){
+                            popUpTo("study_mode_settings") {
+                                inclusive = true
+                            }
+                        }
+
+                        "fill_in_mode" -> navController.navigate("fill_in_mode") {
+                            popUpTo("study_mode_settings") {
+                                inclusive = true
+                            }
+                        }
                     }
                 },
                 modifier = Modifier.padding(8.dp),
