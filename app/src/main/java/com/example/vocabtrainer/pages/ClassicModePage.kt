@@ -88,7 +88,7 @@ fun ClassicModePage(
                 containerColor = Color.White
             ),
             modifier = Modifier
-                .size(width = 350.dp, height = 600.dp)
+                .size(width = 300.dp, height = 550.dp)
                 .padding(bottom = 20.dp),
             elevation = CardDefaults.cardElevation(
                 defaultElevation = 15.dp

@@ -2,9 +2,11 @@ package com.example.vocabtrainer.pages
 
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -71,6 +73,7 @@ fun CreateDeckPage(
         Box(
             modifier = modifier
                 .fillMaxSize()
+                .imePadding()
                 .background(
                     brush = Brush.linearGradient(
                         colors = listOf(
@@ -86,7 +89,7 @@ fun CreateDeckPage(
                 modifier = Modifier
                     .padding(contentPadding)
                     .fillMaxSize(),
-                //verticalArrangement = Arrangement.Center,
+                verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 TextField(

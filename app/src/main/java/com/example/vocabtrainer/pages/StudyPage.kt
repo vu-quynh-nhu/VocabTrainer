@@ -70,7 +70,6 @@ fun StudyPage(
                 defaultElevation = 15.dp
             ),
             onClick = {
-                //showStudyModeDialog = true
                 viewModel.setHasDifficulty(false)
                 viewModel.setStudyModePage("classic_mode")
                 viewModel.resetStudyModeSettings()
@@ -102,8 +101,7 @@ fun StudyPage(
                 defaultElevation = 15.dp
             ),
             onClick = {
-                //showStudyModeDialog = true
-                viewModel.setHasDifficulty(true)
+                viewModel.setHasDifficulty(false)
                 viewModel.setStudyModePage("typing_mode")
                 viewModel.resetStudyModeSettings()
                 navController.navigate("study_mode_settings")

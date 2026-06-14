@@ -49,7 +49,8 @@ fun StudyResultPage(
         Text("richtige Antworten: ${session.correctAnswer}")
         Text("falsche Antworten: ${session.wrongAnswer}")
 
-        if (session.wrongCards.isNotEmpty()) {
+        if (session.wrongCards.isNotEmpty() &&
+            studyViewModel.selectedStudyModePage == "classic_mode") {
             Text("Möchtest du die falsch beantworteten Karten wiederholen?")
 
             Row(
@@ -81,16 +82,44 @@ fun StudyResultPage(
                 }
             }
         } else {
-            Button(
-                onClick = {
-                    navController.navigate("main") {
-                        popUpTo("main") {
-                            inclusive = false
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                if (studyViewModel.selectedStudyModePage != "classic_mode") {
+                    Button(
+                        onClick = {
+                            studyViewModel.restartSession()
+
+                            when (studyViewModel.selectedStudyModePage) {
+                                "typing_mode" -> navController.navigate("typing_mode") {
+                                    popUpTo("results") {
+                                        inclusive = true
+                                    }
+                                }
+
+                                "fill_in_mode" -> navController.navigate("fill_in_mode") {
+                                    popUpTo("results") {
+                                        inclusive = true
+                                    }
+                                }
+                            }
                         }
+                    ) {
+                        Text("Nochmal versuchen")
                     }
                 }
-            ) {
-                Text("Schließen")
+
+                Button(
+                    onClick = {
+                        navController.navigate("main") {
+                            popUpTo("main") {
+                                inclusive = false
+                            }
+                        }
+                    }
+                ) {
+                    Text("Schließen")
+                }
             }
         }
     }

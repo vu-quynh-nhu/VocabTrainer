@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -82,6 +83,7 @@ fun CreateCardPage(
         Box(
             modifier = modifier
                 .fillMaxSize()
+                .imePadding()
                 .background(
                     brush = Brush.linearGradient(
                         colors = listOf(
@@ -97,8 +99,10 @@ fun CreateCardPage(
                 modifier = Modifier
                     .padding(contentPadding)
                     .fillMaxSize(),
-                verticalArrangement = Arrangement
-                    .spacedBy(16.dp),
+                verticalArrangement = Arrangement.spacedBy(
+                    16.dp,
+                    alignment = Alignment.CenterVertically
+                ),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 TextField(

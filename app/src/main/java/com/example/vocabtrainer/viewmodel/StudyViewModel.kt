@@ -111,8 +111,17 @@ class StudyViewModel : ViewModel() {
             cards = session.wrongCards,
             currentIndex = 0,
             correctAnswer = 0,
-            wrongAnswer = 0,
-            wrongCards = emptyList()
+            wrongAnswer = 0
+        )
+    }
+
+    fun restartSession() {
+        val session = studySession ?: return
+
+        studySession = session.copy(
+            currentIndex = 0,
+            correctAnswer = 0,
+            wrongAnswer = 0
         )
     }
 
