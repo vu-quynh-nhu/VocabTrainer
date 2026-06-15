@@ -1,5 +1,6 @@
 package com.example.vocabtrainer.pages
 
+import android.R
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -89,7 +90,10 @@ fun CreateDeckPage(
                 modifier = Modifier
                     .padding(contentPadding)
                     .fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
+                verticalArrangement = Arrangement.spacedBy(
+                    16.dp,
+                    alignment = Alignment.CenterVertically
+                ),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 TextField(
@@ -130,7 +134,8 @@ fun CreateDeckPage(
                     )
                 ) {
                     Text(
-                        text = "Erstellen"
+                        text = "Erstellen",
+                        color = Color.White
                     )
                 }
             }

@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -61,20 +63,7 @@ fun ClassicModePage(
     Column(
         modifier = Modifier.fillMaxSize()
             .background(
-                brush = Brush.linearGradient(
-                    colors = listOf(
-                        Color(0xFF4F6B24),
-                        Color(0xFF5E7F2C),
-                        Color(0xFF6F943C),
-                        Color(0xFF7FA34A),
-                        Color(0xFF8EAE5B),
-                        Color(0xFF9CBD72),
-                        Color(0xFFA7C281),
-                        Color(0xFFACC587),
-                    ),
-                    start = Offset.Zero,
-                    end = Offset.Infinite
-                )
+                Color(0xFFA7C281)
             ),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -82,6 +71,8 @@ fun ClassicModePage(
         Text(
             text = "${session.currentIndex + 1} von ${session.cards.size} Karten"
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         ElevatedCard(
             colors = CardDefaults.cardColors(
@@ -134,7 +125,8 @@ fun ClassicModePage(
                 ) {
                     Icon(
                         Icons.Default.Close,
-                        null
+                        null,
+                        tint = Color.Black
                     )
                 }
 
@@ -150,7 +142,8 @@ fun ClassicModePage(
                 ) {
                     Icon(
                         Icons.Default.Check,
-                        null
+                        null,
+                        tint = Color.Black
                     )
                 }
             }

@@ -169,7 +169,8 @@ fun CreateCardPage(
                             Toast.LENGTH_SHORT
                         ).show()
 
-                        navController.popBackStack()
+                        frontSideText = ""
+                        backSideText = ""
                     },
                     enabled = frontSideText.isNotBlank() && backSideText.isNotBlank(),
                     modifier = Modifier.padding(8.dp),
@@ -178,7 +179,8 @@ fun CreateCardPage(
                     )
                 ) {
                     Text(
-                        text = "Erstellen"
+                        text = "Erstellen",
+                        color = Color.White
                     )
                 }
             }

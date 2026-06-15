@@ -40,8 +40,6 @@ fun MainScreen(
         NavigationItem("Erstellen", R.drawable.add_deck, "create"),
         NavigationItem("Lernen", R.drawable.learn, "study")
     )
-
-    // this stores the selected tab
     val mainNavController = rememberNavController()
     val navBackStackEntry by mainNavController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route ?: "decks"

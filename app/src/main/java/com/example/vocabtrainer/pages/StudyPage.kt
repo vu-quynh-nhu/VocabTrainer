@@ -40,19 +40,17 @@ fun StudyPage(
                         Color(0xFF9CBD72),
                         Color(0xFFA7C281),
                         Color(0xFFACC587),
-                        //Color(0xFF8CA364)
                     ),
                     start = Offset.Zero,
                     end = Offset.Infinite
                 )
             ),
-        //verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = "Wähle einen Lernmodus aus",
             color = Color.White,
-            fontSize = 20.sp,
+            fontSize = 25.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(
                 top = 30.dp
@@ -79,13 +77,24 @@ fun StudyPage(
             Text(
                 text = "Klassisch",
                 color = Color.Black,
-                modifier = Modifier.padding(top = 10.dp, start = 10.dp, end = 10.dp, bottom = 1.dp)
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(
+                    top = 10.dp,
+                    start = 10.dp,
+                    end = 10.dp,
+                    bottom = 1.dp
+                )
             )
             Text(
-                text = "Überprüfe dein Wissen eigentständig.",
+                text = "In diesem Lernmodus überprüfst du dein Wissen eigentständig.",
                 color = Color.Black,
-                fontSize = 12.sp,
-                modifier = Modifier.padding(top = 0.dp, start = 10.dp, end = 10.dp, bottom = 0.dp)
+                fontSize = 13.sp,
+                modifier = Modifier.padding(
+                    top = 0.dp,
+                    start = 10.dp,
+                    end = 10.dp,
+                    bottom = 0.dp
+                )
             )
         }
 
@@ -110,13 +119,24 @@ fun StudyPage(
             Text(
                 text = "Eintippen",
                 color = Color.Black,
-                modifier = Modifier.padding(top = 10.dp, start = 10.dp, end = 10.dp, bottom = 1.dp)
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(
+                    top = 10.dp,
+                    start = 10.dp,
+                    end = 10.dp,
+                    bottom = 1.dp
+                )
             )
             Text(
-                text = "Überprüfe dein Wissen eigentständig.",
+                text = "In diesem Lernmodus gibst du die passende Anwort selbst ein.",
                 color = Color.Black,
-                fontSize = 12.sp,
-                modifier = Modifier.padding(top = 0.dp, start = 10.dp, end = 10.dp, bottom = 0.dp)
+                fontSize = 13.sp,
+                modifier = Modifier.padding(
+                    top = 0.dp,
+                    start = 10.dp,
+                    end = 10.dp,
+                    bottom = 0.dp
+                )
             )
         }
 
@@ -141,13 +161,24 @@ fun StudyPage(
             Text(
                 text = "Fülle die Lücke",
                 color = Color.Black,
-                modifier = Modifier.padding(top = 10.dp, start = 10.dp, end = 10.dp, bottom = 1.dp)
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(
+                    top = 10.dp,
+                    start = 10.dp,
+                    end = 10.dp,
+                    bottom = 1.dp
+                )
             )
             Text(
-                text = "Überprüfe dein Wissen eigentständig.",
+                text = "In diesem Lernmodus füllst du die fehlenden Buchstaben im Wort.",
                 color = Color.Black,
-                fontSize = 12.sp,
-                modifier = Modifier.padding(top = 0.dp, start = 10.dp, end = 10.dp, bottom = 0.dp)
+                fontSize = 13.sp,
+                modifier = Modifier.padding(
+                    top = 0.dp,
+                    start = 10.dp,
+                    end = 10.dp,
+                    bottom = 0.dp
+                )
             )
         }
     }

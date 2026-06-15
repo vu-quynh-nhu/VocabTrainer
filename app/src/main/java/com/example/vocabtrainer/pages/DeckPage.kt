@@ -3,14 +3,18 @@ package com.example.vocabtrainer.pages
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
@@ -108,7 +112,10 @@ fun DeckPage(
                         selectedDeckOnPress = null
                     }
                 ) {
-                    Text("Löschen")
+                    Text(
+                        text = "Löschen",
+                        color = Color.White
+                    )
                 }
             },
             dismissButton =  {
@@ -117,7 +124,10 @@ fun DeckPage(
                         showDeleteDialog = false
                     }
                 ) {
-                    Text("Abbrechen")
+                    Text(
+                        text = "Abbrechen",
+                        color = Color.White
+                    )
                 }
             }
         )
@@ -148,55 +158,91 @@ fun DeckPage(
     ) {
         Text(
             text = "Meine Stapel",
-            fontSize = 40.sp,
-            color = Color.White
+            color = Color.White,
+            fontSize = 25.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(
+                top = 30.dp,
+                bottom = 10.dp
+            )
         )
 
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3)
-        ) {
-            items(deckViewModel.decks) { deck ->
-                val cardAmount = cardViewModel.cards.count {
-                    it.deck == deck
-                }
-
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Card(
-                        colors = CardDefaults.cardColors(
-                            containerColor = Color.White
+        if (deckViewModel.decks.isEmpty()) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Box(
+                    modifier = Modifier
+                        .padding(
+                            20.dp
+                        )
+                        .background(
+                            color = Color.White.copy(alpha = 0.7f),
+                            shape = RoundedCornerShape(50)
+                        )
+                        .padding(
+                            horizontal = 20.dp,
+                            vertical = 12.dp
                         ),
-                        modifier = Modifier
-                            .padding(6.dp)
-                            .aspectRatio(1f)
-                            .combinedClickable(
-                                onClick = {
-                                    deckViewModel.selectedDeck(deck)
-                                    navController.navigate("inside_deck")
-                                },
-                                onLongClick = {
-                                    selectedDeckOnPress = deck
-                                }
-                            ),
-                    ) {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = deck.name,
-                                color = Color.Black,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Du hast noch keinen Stapel angelegt. " +
+                                "Klick unten auf der Navigationsleiste auf das +, " +
+                                "um einen Stapel zu erstellen.",
+                        color = Color.Black,
+                        fontSize = 14.sp
+                    )
+                }
+            }
+        } else {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(3)
+            ) {
+                items(deckViewModel.decks) { deck ->
+                    val cardAmount = cardViewModel.cards.count {
+                        it.deck == deck
                     }
 
-                    Text(
-                        text = "$cardAmount ${if (cardAmount == 1) "Karte" else "Karten"}",
-                        color = Color.Black,
-                        fontWeight = FontWeight.Medium
-                    )
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Card(
+                            colors = CardDefaults.cardColors(
+                                containerColor = Color.White
+                            ),
+                            modifier = Modifier
+                                .padding(6.dp)
+                                .aspectRatio(1f)
+                                .combinedClickable(
+                                    onClick = {
+                                        deckViewModel.selectedDeck(deck)
+                                        navController.navigate("inside_deck")
+                                    },
+                                    onLongClick = {
+                                        selectedDeckOnPress = deck
+                                    }
+                                ),
+                        ) {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = deck.name,
+                                    color = Color.Black,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
+
+                        Text(
+                            text = "$cardAmount ${if (cardAmount == 1) "Karte" else "Karten"}",
+                            color = Color.Black,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
                 }
             }
         }
