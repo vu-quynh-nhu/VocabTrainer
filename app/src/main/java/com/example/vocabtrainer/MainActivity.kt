@@ -11,12 +11,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.vocabtrainer.pages.ClassicModePage
 import com.example.vocabtrainer.pages.CreateCardPage
 import com.example.vocabtrainer.pages.CreateDeckPage
-import com.example.vocabtrainer.pages.CreatePage
-import com.example.vocabtrainer.pages.DeckPage
 import com.example.vocabtrainer.pages.FillInBlankModePage
 import com.example.vocabtrainer.pages.InsideDeckPage
 import com.example.vocabtrainer.pages.StudyModeSettingsPage
-import com.example.vocabtrainer.pages.StudyPage
 import com.example.vocabtrainer.pages.StudyResultPage
 import com.example.vocabtrainer.pages.TypingModePage
 import com.example.vocabtrainer.screen.MainScreen
