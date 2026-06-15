@@ -1,5 +1,6 @@
 package com.example.vocabtrainer.pages
 
+import android.R
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -63,7 +64,13 @@ fun StudyModeSettingsPage(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "")
+                    Text(
+                        text = if (currentStep == 1) {
+                            "Wähle einen Stapel"
+                        } else {
+                            "Lernmodus einrichten"
+                        }
+                    )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent,
@@ -130,18 +137,14 @@ fun StepOne(
         modifier = Modifier
             .padding(contentPadding)
             .fillMaxSize(),
-        //verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text (
-            text = "Wähle einen Stapel",
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Bold
-        )
-
         LazyVerticalGrid(
-            columns = GridCells.Fixed(3)
-        ) {
+            columns = GridCells.Fixed(3),
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+            ,            ) {
             items(viewModel.decks.filter { deck ->
                 cardViewModel.cards.any { card ->
                     card.deck == deck
@@ -183,6 +186,7 @@ fun StepOne(
                 }
             }
         }
+
         Button(
             onClick = {
                 selectedDeck?.let {
@@ -192,16 +196,22 @@ fun StepOne(
                 onNextStep()
             },
             enabled = selectedDeck != null,
-            modifier = Modifier.padding(8.dp),
+            modifier = Modifier
+                .padding(
+                    bottom = 70.dp,
+                    top = 20.dp
+                ),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF7FA34A)
             )
         ) {
             Text(
-                text = "Weiter"
+                text = "Weiter",
+                color = Color.White
             )
         }
     }
+
 }
 
 @Composable
@@ -212,7 +222,7 @@ fun StepTwo(
     cardViewModel: CardViewModel,
     contentPadding: PaddingValues
 ) {
-    val difficultyOptions = listOf("leicht", "mittel", "schwer")
+    val difficultyOptions = listOf("leicht", "schwer")
     val cardSideOptions = listOf("Vorderseite", "Rückseite")
     val cardsOfSelectedDeck = cardViewModel.cards.filter {
         it.deck == viewModel.selectedStudyDeck
@@ -222,48 +232,46 @@ fun StepTwo(
         modifier = Modifier
             .padding(contentPadding)
             .fillMaxSize(),
-        //verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (viewModel.hasDifficultyMode) {
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            if (viewModel.hasDifficultyMode) {
+                Text(
+                    text = "Schwierigkeitsgrad",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold
+                )
+
+                SegmentedButton(
+                    options = difficultyOptions,
+                    selectedIndex = viewModel.difficultyIndex,
+                    onSelectedIndex = {
+                        viewModel.setDifficultyMode(it)
+                    }
+                )
+
+                Spacer(modifier = Modifier.size(12.dp))
+            }
+
             Text(
-                text = "Schwierigkeitsgrad",
+                text = "Kartenansicht",
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold
             )
 
             SegmentedButton(
-                options = difficultyOptions,
-                selectedIndex = viewModel.difficultyIndex,
+                options = cardSideOptions,
+                selectedIndex = viewModel.cardSideIndex,
                 onSelectedIndex = {
-                    viewModel.setDifficultyMode(it)
+                    viewModel.setCardSide(it)
                 }
             )
 
             Spacer(modifier = Modifier.size(12.dp))
-        }
 
-        Text(
-            text = "Kartenansicht",
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Bold
-        )
-
-        SegmentedButton(
-            options = cardSideOptions,
-            selectedIndex = viewModel.cardSideIndex,
-            onSelectedIndex = {
-                viewModel.setCardSide(it)
-            }
-        )
-
-        Spacer(modifier = Modifier.size(12.dp))
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-        ) {
             Button(
                 onClick = {
                     viewModel.createStudySession(
@@ -294,13 +302,17 @@ fun StepTwo(
                         }
                     }
                 },
-                modifier = Modifier.padding(8.dp),
+                modifier = Modifier.padding(
+                    top = 24.dp,
+                    bottom = 16.dp
+                ),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF7FA34A)
                 )
             ) {
                 Text(
-                    text = "Start"
+                    text = "Start",
+                    color = Color.White
                 )
             }
         }

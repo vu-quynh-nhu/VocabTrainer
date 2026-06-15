@@ -47,9 +47,6 @@ class StudyViewModel : ViewModel() {
                 selectedDifficulty = "easy"
             }
             1 -> {
-                selectedDifficulty = "medium"
-            }
-            2 -> {
                 selectedDifficulty = "hard"
             }
         }
@@ -123,6 +120,37 @@ class StudyViewModel : ViewModel() {
             correctAnswer = 0,
             wrongAnswer = 0
         )
+    }
+
+    fun blankWords(
+        word: String,
+        difficultyIndex: Int?
+    ): String {
+        return when (difficultyIndex) {
+            0 -> {
+                val index = (0 until word.length).random()
+
+                word.mapIndexed { i, ch ->
+                    if (i == index) {
+                        '*'
+                    } else {
+                        ch
+                    }
+                }.joinToString("")
+            }
+
+            1 -> {
+                word.map { ch ->
+                    if (ch.lowercaseChar() in "aeiou") {
+                        '*'
+                    } else {
+                        ch
+                    }
+                }.joinToString("")
+            }
+
+            else -> word
+        }
     }
 
     fun selectedStudyDeck(deck: Deck) {

@@ -1,12 +1,24 @@
 package com.example.vocabtrainer.pages
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -15,10 +27,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.vocabtrainer.viewmodel.StudyViewModel
 
@@ -31,13 +43,33 @@ fun FillInBlankModePage(
     val chosenCardSide = viewModel.studyMode?.cardSide
     val currentCard = session.cards.getOrNull(session.currentIndex)
     var showAnswer by remember { mutableStateOf(false) }
-    var userInput by remember { mutableStateOf("") }
-
     var isCorrect by remember { mutableStateOf<Boolean?>(null) }
     val correctAnswer = if (chosenCardSide == 0) {
-        currentCard?.backSide ?: "keine Karte"
-    } else {
         currentCard?.frontSide ?: "keine Karte"
+    } else {
+        currentCard?.backSide ?: "keine Karte"
+    }
+
+    val word = if (chosenCardSide == 0) {
+        currentCard?.frontSide ?: "keine Karte"
+    } else {
+        currentCard?.backSide ?: "keine Karte"
+    }
+    val blankWord = remember(
+        session.currentIndex,
+        word,
+        viewModel.studyMode?.difficulty
+    ) {
+        viewModel.blankWords(
+            word = word,
+            viewModel.studyMode?.difficulty ?: 0
+        )
+    }
+    val gapCount = blankWord.count {
+        it == '*'
+    }
+    var userInput by remember {
+        mutableStateOf(List(gapCount) {""} )
     }
     val isLastCard = session.currentIndex == session.cards.lastIndex
 
@@ -51,6 +83,10 @@ fun FillInBlankModePage(
         }
     }
 
+    LaunchedEffect(blankWord) {
+        userInput = List(gapCount) {""}
+    }
+
     if (currentCard == null) {
         return
     }
@@ -59,55 +95,73 @@ fun FillInBlankModePage(
         modifier = Modifier
             .fillMaxSize()
             .background(
-                brush = Brush.linearGradient(
-                    colors = listOf(
-                        Color(0xFF4F6B24),
-                        Color(0xFF5E7F2C),
-                        Color(0xFF6F943C),
-                        Color(0xFF7FA34A),
-                        Color(0xFF8EAE5B),
-                        Color(0xFF9CBD72),
-                        Color(0xFFA7C281),
-                        Color(0xFFACC587),
-                    ),
-                    start = Offset.Zero,
-                    end = Offset.Infinite
-                )
-            ),
-        //verticalArrangement = Arrangement.Center,
+                Color(0xFFA7C281)
+            )
+            .imePadding(),
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = if (!showAnswer) {
-                if (chosenCardSide == 0) {
-                    currentCard.frontSide
-                } else {
-                    currentCard.backSide
-                }
-            } else {
-                if (chosenCardSide == 0) {
-                    currentCard.backSide
-                } else {
-                    currentCard.frontSide
-                }
-            },
-            color = Color.Black,
-            fontSize = 25.sp
-        )
 
-        TextField(
-            value = userInput,
-            onValueChange = { userInput = it },
-            label = { Text("Gebe deine Antwort ein") },
-            isError = userInput.isBlank()
-        )
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            var gapIndex = 0
+
+            blankWord.forEach { ch ->
+                if (ch == '*') {
+                    val currentGap = gapIndex
+
+                    OutlinedTextField(
+                        value = userInput[currentGap],
+                        onValueChange = {
+                            userInput = userInput.toMutableList().apply {
+                                this[currentGap] = it.take(1)
+                            }
+                        },
+                        modifier = Modifier.width(60.dp),
+                        singleLine = true,
+                        textStyle = LocalTextStyle.current.copy(
+                            textAlign = TextAlign.Center
+                        ),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedTextColor = Color.Black,
+                            unfocusedTextColor = Color.Black,
+                            focusedContainerColor = Color(0xFF5E7F2C),
+                            unfocusedContainerColor = Color(0xFF5E7F2C),
+                            focusedBorderColor = Color(0xFF5E7F2C),
+                            unfocusedBorderColor = Color(0xFF5E7F2C),
+                            cursorColor = Color.Black
+                        )
+                    )
+                    gapIndex++
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .size(60.dp)
+                            .border(
+                                width = 4.dp,
+                                color = Color(0xFF5E7F2C),
+                                shape = RoundedCornerShape(8.dp)
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(ch.toString())
+                    }
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         if (showAnswer) {
             if (isCorrect == true) {
                 Text(
                     text = "Deine Antwort ist richtig",
-                    color = Color(0xFF8EAE5B)
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold
                 )
+
+                Spacer(modifier = Modifier.height(16.dp))
 
                 Button(
                     onClick = {
@@ -120,26 +174,35 @@ fun FillInBlankModePage(
                             }
                         } else {
                             viewModel.correctAnswer()
-                            userInput = ""
+                            userInput = List(gapCount) {""}
                             showAnswer = false
                             isCorrect = null
                         }
                     }
                 ) {
-                    Text(if (isLastCard) "Ergebnis anzeigen" else "Weiter")
+                    Text(
+                        text = if (isLastCard) "Ergebnis anzeigen" else "Weiter",
+                        color = Color.Black
+                    )
                 }
             } else {
                 Text(
                     text = "Deine Antwort ist leider falsch.",
-                    color = Color(0xFFF44336)
+                    color = Color(0xFFF44336),
+                    fontWeight = FontWeight.Bold
                 )
+
+                Spacer(modifier = Modifier.height(5.dp))
 
                 Text(
-                    text = "Die richitge Antwort wäre: $correctAnswer",
-                    color = Color.Black
+                    text = "richitge Antwort: $correctAnswer",
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold
                 )
-                Button(
 
+                Spacer(modifier = Modifier.height(11.dp))
+
+                Button(
                     onClick = {
                         if (isLastCard) {
                             viewModel.wrongAnswer()
@@ -150,13 +213,16 @@ fun FillInBlankModePage(
                             }
                         } else {
                             viewModel.wrongAnswer()
-                            userInput = ""
+                            userInput = List(gapCount) {""}
                             showAnswer = false
                             isCorrect = null
                         }
                     }
                 ) {
-                    Text(if (isLastCard) "Ergebnis anzeigen" else "Weiter")
+                    Text(
+                        text = if (isLastCard) "Ergebnis anzeigen" else "Weiter",
+                        color = Color.Black
+                    )
                 }
             }
         } else {
@@ -165,7 +231,24 @@ fun FillInBlankModePage(
                     containerColor = Color(0xFF6F943C)
                 ),
                 onClick = {
-                    isCorrect = userInput.trim() == correctAnswer.trim()
+                    val userWord = buildString {
+                        var gapIndex = 0
+
+                        blankWord.forEach { ch ->
+                            if (ch == '*') {
+                                append(
+                                    userInput[gapIndex].ifBlank {
+                                        "*"
+                                    }
+                                )
+                                gapIndex++
+                            } else {
+                                append(ch)
+                            }
+                        }
+                    }
+
+                    isCorrect = userWord == correctAnswer
                     showAnswer = true
                 }
             ) {

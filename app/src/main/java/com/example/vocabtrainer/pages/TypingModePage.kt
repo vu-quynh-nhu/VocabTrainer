@@ -3,8 +3,12 @@ package com.example.vocabtrainer.pages
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
@@ -21,6 +25,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.vocabtrainer.viewmodel.StudyViewModel
@@ -63,47 +68,33 @@ fun TypingModePage(
             .fillMaxSize()
             .imePadding()
             .background(
-                brush = Brush.linearGradient(
-                    colors = listOf(
-                        Color(0xFF4F6B24),
-                        Color(0xFF5E7F2C),
-                        Color(0xFF6F943C),
-                        Color(0xFF7FA34A),
-                        Color(0xFF8EAE5B),
-                        Color(0xFF9CBD72),
-                        Color(0xFFA7C281),
-                        Color(0xFFACC587),
-                    ),
-                    start = Offset.Zero,
-                    end = Offset.Infinite
-                )
+                Color(0xFFA7C281)
             ),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = if (!showAnswer) {
-                if (chosenCardSide == 0) {
-                    currentCard.frontSide
-                } else {
-                    currentCard.backSide
-                }
+            text = if (chosenCardSide == 0) {
+                currentCard.frontSide
             } else {
-                if (chosenCardSide == 0) {
-                    currentCard.backSide
-                } else {
-                    currentCard.frontSide
-                }
+                currentCard.backSide
             },
             color = Color.Black,
-            fontSize = 25.sp
+            fontSize = 25.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(
+                bottom = 20.dp
+            )
         )
+        Spacer(modifier = Modifier.height(11.dp))
 
         TextField(
             value = userInput,
             onValueChange = { userInput = it },
             label = { Text("Gebe deine Antwort ein") },
         )
+
+        Spacer(modifier = Modifier.height(11.dp))
 
         if (showAnswer) {
             if (isCorrect == true) {
@@ -113,6 +104,8 @@ fun TypingModePage(
                     fontWeight = FontWeight.Bold
                 )
 
+                Spacer(modifier = Modifier.height(16.dp))
+
                 Button(
                     onClick = {
                         if (isLastCard) {
@@ -130,7 +123,10 @@ fun TypingModePage(
                         }
                     }
                 ) {
-                    Text(if (isLastCard) "Ergebnis anzeigen" else "Weiter")
+                    Text(
+                        text = if (isLastCard) "Ergebnis anzeigen" else "Weiter",
+                        color = Color.Black
+                    )
                 }
             } else {
                 Text(
@@ -139,13 +135,17 @@ fun TypingModePage(
                     fontWeight = FontWeight.Bold
                 )
 
+                Spacer(modifier = Modifier.height(5.dp))
+
                 Text(
-                    text = "Die richitge Antwort wäre: $correctAnswer",
+                    text = "richitge Antwort: $correctAnswer",
                     color = Color.Black,
                     fontWeight = FontWeight.Bold
                 )
-                Button(
 
+                Spacer(modifier = Modifier.height(11.dp))
+
+                Button(
                     onClick = {
                         if (isLastCard) {
                             viewModel.wrongAnswer()
@@ -162,7 +162,10 @@ fun TypingModePage(
                         }
                     }
                 ) {
-                    Text(if (isLastCard) "Ergebnis anzeigen" else "Weiter")
+                    Text(
+                        text = if (isLastCard) "Ergebnis anzeigen" else "Weiter",
+                        color = Color.Black
+                    )
                 }
             }
         } else {
